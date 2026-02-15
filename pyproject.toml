@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "date-shawarma-bk"
+version = "0.1.0"
+description = "Date Shawarma Backend API"
+authors = ["Date Shawarma"]
+readme = "README.md"
+packages = [{include = "app"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "*"
+uvicorn = {extras = ["standard"], version = "*"}
+sqlalchemy = "*"
+alembic = "*"
+psycopg2-binary = "*"
+pydantic = "^2.12.4"
+pydantic-settings = "*"
+PyJWT = "*"
+passlib = {extras = ["bcrypt"], version = "*"}
+email-validator = "*"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
