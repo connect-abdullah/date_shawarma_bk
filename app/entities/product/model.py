@@ -12,7 +12,7 @@ class Product(Base, BaseModel):
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=False)
     photo = Column(String, nullable=True)
     is_featured = Column(Boolean, default=False, nullable=True)
-    is_trending = Column(Boolean, default=False, nullable=True)
+    is_trending = Column(Boolean, nullable=True, default=False)
     is_available = Column(Boolean, default=True, nullable=False)
 
     variants = relationship(

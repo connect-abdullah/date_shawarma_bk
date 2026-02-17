@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.entities.product.model import Product
-from app.entities.product.schema import ProductCreate, ProductRead, ProductUpdate
+from app.entities.product.schema import ProductCreate, ProductRead, ProductUpdate, ProductListHomePage
 
 
 class ProductService:
@@ -18,13 +18,58 @@ class ProductService:
         p = self.db.query(Product).filter(Product.id == product_id).first()
         return ProductRead.model_validate(p) if p else None
 
-    def get_all(self, featured_only: bool = False, trending_only: bool = False) -> list[ProductRead]:
-        q = self.db.query(Product).filter(Product.is_active == True, Product.is_available == True)
+    def get_all(
+        self,
+        featured_only: bool = False,
+        category: str | None = None,
+        limit: int = 20,
+    ) -> list[ProductListHomePage]:
+        q = self.db.query(Product).filter(
+            Product.is_active == True,  # noqa: E712
+            Product.is_available == True,  # noqa: E712
+        )
+
         if featured_only:
-            q = q.filter(Product.is_featured == True)
-        if trending_only:
-            q = q.filter(Product.is_trending == True)
-        return [ProductRead.model_validate(p) for p in q.all()]
+            q = q.filter(Product.is_featured == True)  # noqa: E712
+
+        if category:
+            # Filter by category name (case-insensitive), e.g. \"pizzas\", \"burgers\"
+            from app.entities.category.model import Category
+
+            q = q.join(Product.category).filter(
+                Category.category_name.ilike(category)
+            )
+
+        # Hard limit page size
+        q = q.order_by(Product.id).limit(limit)
+
+        products = q.all()
+        results: list[ProductListHomePage] = []
+
+        for p in products:
+            # Home page needs a "default" variant (first variant).
+            # If a product has no variants yet, skip it (or add one first).
+            if not getattr(p, "variants", None):
+                continue
+            v0 = p.variants[0]
+
+            results.append(
+                ProductListHomePage(
+                    id=p.id,
+                    name=p.name,
+                    photo=p.photo or "",
+                    short_description=p.short_description or "",
+                    category_id=p.category_id,
+                    cateogry_name=getattr(getattr(p, "category", None), "category_name", "") or "",
+                    is_featured=bool(p.is_featured),
+                    variant_name=v0.variant_name,
+                    s_variant_price=v0.price,
+                    variant_product_id=v0.product_id,
+                    variant_id=v0.id,
+                )
+            )
+
+        return results
 
     def update(self, product_id: int, payload: ProductUpdate) -> ProductRead | None:
         p = self.db.query(Product).filter(Product.id == product_id).first()

@@ -6,7 +6,6 @@ class ReviewBase(BaseModel):
     user_id: int
     rating: int
     comment: str | None = None
-    is_approved: bool = False
 
 
 class ReviewCreate(BaseModel):
@@ -17,8 +16,6 @@ class ReviewCreate(BaseModel):
 
 
 class ReviewUpdate(BaseModel):
-    rating: int | None = None
-    comment: str | None = None
     is_approved: bool | None = None
 
 

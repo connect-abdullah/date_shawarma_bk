@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.entities.product.service import ProductService
-from app.entities.product.schema import ProductCreate, ProductRead, ProductUpdate
+from app.entities.product.schema import ProductCreate, ProductRead, ProductUpdate, ProductListHomePage
 from app.core.response import APIResponse, ok, fail
 from app.core.auth import get_current_admin_id
 
@@ -22,14 +22,27 @@ def create_product(
         return fail(message=str(e))
 
 
-@router.get("", response_model=APIResponse[list[ProductRead]])
+@router.get("", response_model=APIResponse[list[ProductListHomePage]])
 def list_products(
     db: Session = Depends(get_db),
     featured: bool = Query(False),
-    trending: bool = Query(False),
+    category: str | None = Query(
+        default=None,
+        description="Optional category key (e.g. 'pizzas', 'burgers', 'wings')",
+    ),
+    limit: int = Query(
+        default=90,
+        ge=1,
+        le=100,
+        description="Max number of products to return",
+    ),
 ):
     try:
-        products = ProductService(db).get_all(featured_only=featured, trending_only=trending)
+        products = ProductService(db).get_all(
+            featured_only=featured,
+            category=category,
+            limit=limit,
+        )
         return ok(data=products, message="Products retrieved")
     except Exception as e:
         return fail(message=str(e))
