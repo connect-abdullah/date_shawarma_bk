@@ -1,0 +1,411 @@
+{
+  "pizzas": [
+    {
+      "name": "Date Special Pizza",
+      "description": "House special pizza loaded with premium toppings, signature sauce, and baked to perfection with a golden crust.",
+      "short_description": "Premium toppings with signature sauce.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Small", "price": 699 },
+        { "size": "Medium", "price": 1099 },
+        { "size": "Large", "price": 1499 },
+        { "size": "XL", "price": 1999 }
+      ]
+    },
+    {
+      "name": "Crown Crust Pizza",
+      "description": "Cheese-filled crown crust with rich toppings and savory sauce, a decadent cheesy bite at every edge.",
+      "short_description": "Cheesy crown crust with rich toppings.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Medium", "price": 1150 },
+        { "size": "Large", "price": 1550 },
+        { "size": "XL", "price": 2199 }
+      ]
+    },
+    {
+      "name": "Behari Kebab Pizza",
+      "description": "Smoky Behari kebab chunks layered with mozzarella and signature sauce, delivering a robust flavor for meat lovers.",
+      "short_description": "Smoky kebab with mozzarella.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Medium", "price": 1099 },
+        { "size": "Large", "price": 1499 },
+        { "size": "XL", "price": 1999 }
+      ]
+    },
+    {
+      "name": "Stuff Crust Pizza",
+      "description": "Classic pizza with stuffed cheesy crust and rich toppings for the ultimate cheesy experience.",
+      "short_description": "Cheesy stuffed crust pizza.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Medium", "price": 1199 },
+        { "size": "Large", "price": 1599 },
+        { "size": "XL", "price": 2199 }
+      ]
+    },
+    {
+      "name": "Chicken Tikka Pizza",
+      "description": "Spicy tikka chicken with capsicum, onions, and mozzarella, baked to perfection with our signature sauce.",
+      "short_description": "Spicy chicken with veggies.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Small", "price": 499 },
+        { "size": "Medium", "price": 999 },
+        { "size": "Large", "price": 1350 },
+        { "size": "XL", "price": 1899 }
+      ]
+    },
+    {
+      "name": "Fajita Pizza",
+      "description": "Fajita-seasoned chicken with bold flavor, topped with cheese and fresh vegetables, baked for a flavorful bite.",
+      "short_description": "Fajita chicken with cheese.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Small", "price": 499 },
+        { "size": "Medium", "price": 999 },
+        { "size": "Large", "price": 1350 },
+        { "size": "XL", "price": 1899 }
+      ]
+    },
+    {
+      "name": "Loaded Chicken Pizza",
+      "description": "Fully loaded chicken pizza with rich cheese blend, fresh veggies, and savory sauce, perfect for cheese lovers.",
+      "short_description": "Chicken and rich cheese blend.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Small", "price": 499 },
+        { "size": "Medium", "price": 999 },
+        { "size": "Large", "price": 1350 },
+        { "size": "XL", "price": 1899 }
+      ]
+    },
+    {
+      "name": "Hot and Spicy Pizza",
+      "description": "Fiery chicken pizza with extra spice, fresh toppings, and mozzarella, perfect for those who love a kick.",
+      "short_description": "Spicy chicken with cheese.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Small", "price": 499 },
+        { "size": "Medium", "price": 999 },
+        { "size": "Large", "price": 1350 },
+        { "size": "XL", "price": 1899 }
+      ]
+    },
+    {
+      "name": "Cheese Lover Pizza",
+      "description": "Loaded with rich mozzarella and cheese sauce, this pizza is a heaven for cheese lovers.",
+      "short_description": "Rich mozzarella and cheese sauce.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Small", "price": 399 },
+        { "size": "Medium", "price": 799 },
+        { "size": "Large", "price": 1250 },
+        { "size": "XL", "price": 1599 }
+      ]
+    },
+    {
+      "name": "Vegetarian Pizza",
+      "description": "Fresh vegetables layered over savory sauce and mozzarella, creating a healthy yet delicious pizza option.",
+      "short_description": "Fresh vegetable pizza.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Small", "price": 399 },
+        { "size": "Medium", "price": 799 },
+        { "size": "Large", "price": 1299 },
+        { "size": "XL", "price": 1650 }
+      ]
+    }
+  ],
+
+  "burgers": [
+    {
+      "name": "Zinger Burger",
+      "description": "Crispy chicken fillet with fresh lettuce, tomatoes, and mayo in a soft bun.",
+      "short_description": "Crispy chicken with mayo.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 350 }]
+    },
+    {
+      "name": "Zinger Supreme Burger",
+      "description": "Premium zinger burger with melted cheese, special sauce, and fresh vegetables.",
+      "short_description": "Cheese and sauce-loaded zinger.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 550 }]
+    },
+    {
+      "name": "Grilled Burger",
+      "description": "Juicy grilled chicken patty with fresh lettuce and sauce in a soft bun.",
+      "short_description": "Juicy grilled chicken.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 499 }]
+    },
+    {
+      "name": "Chicken Burger",
+      "description": "Classic chicken burger with lettuce and mayo in a freshly baked bun.",
+      "short_description": "Classic chicken burger.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 290 }]
+    },
+    {
+      "name": "Tower Burger",
+      "description": "Double layer stacked burger with cheese, lettuce, and sauces.",
+      "short_description": "Double layer burger.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 550 }]
+    },
+    {
+      "name": "Chicken Supreme Burger",
+      "description": "Loaded supreme chicken burger with cheese, lettuce, tomato, and sauce.",
+      "short_description": "Supreme chicken with toppings.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 500 }]
+    },
+    {
+      "name": "Chicken Chapli Kabab Burger",
+      "description": "Desi-style chapli kabab burger with fresh onions, tomatoes, and sauce.",
+      "short_description": "Chapli kabab in bun.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 480 }]
+    },
+    {
+      "name": "Shami Kebab Burger",
+      "description": "Soft shami kebab in a freshly baked bun with light sauce.",
+      "short_description": "Soft shami kebab.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 170 }]
+    }
+  ],
+
+  "shawarma": [
+    {
+      "name": "Chicken Shawarma",
+      "description": "Classic chicken shawarma wrap with tender grilled chicken, garlic sauce, and fresh vegetables.",
+      "short_description": "Classic chicken wrap.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Small", "price": 200 },
+        { "size": "Large", "price": 350 }
+      ]
+    },
+    {
+      "name": "Lahori Special Shawarma",
+      "description": "Traditional Lahori-style wrap with spiced chicken and special sauce.",
+      "short_description": "Spicy Lahori-style wrap.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Small", "price": 320 },
+        { "size": "Large", "price": 500 }
+      ]
+    },
+    {
+      "name": "Date Special Olive Shawarma",
+      "description": "Special shawarma with chicken, olives, fresh veggies, and signature sauce.",
+      "short_description": "Chicken shawarma with olives.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Small", "price": 300 },
+        { "size": "Large", "price": 480 }
+      ]
+    },
+    {
+      "name": "Zinger Shawarma",
+      "description": "Crispy zinger chicken wrapped with fresh lettuce, tomatoes, and sauce.",
+      "short_description": "Crispy zinger wrap.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Small", "price": 300 },
+        { "size": "Large", "price": 480 }
+      ]
+    },
+    {
+      "name": "Two in One Shawarma",
+      "description": "Combination wrap of two shawarmas in one for sharing or extra appetite.",
+      "short_description": "Double wrap special.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Standard", "price": 320 }
+      ]
+    }
+  ],
+
+  "wings": [
+    {
+      "name": "Hot Wings",
+      "description": "Crispy wings tossed in spicy seasoning, perfect as starter or snack.",
+      "short_description": "Spicy crispy wings.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "5 pieces", "price": 280 },
+        { "size": "10 pieces", "price": 550 }
+      ]
+    },
+    {
+      "name": "Oven Baked Wings",
+      "description": "Healthy oven-baked wings seasoned lightly, retaining crunch and flavor.",
+      "short_description": "Healthy oven-baked wings.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "6 pieces", "price": 320 },
+        { "size": "12 pieces", "price": 600 }
+      ]
+    },
+    {
+      "name": "Flaming Wings",
+      "description": "Extra spicy flaming wings with bold flavors, ideal for spice lovers.",
+      "short_description": "Extra spicy wings.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "6 pieces", "price": 350 },
+        { "size": "12 pieces", "price": 650 }
+      ]
+    }
+  ],
+
+  "pasta": [
+    {
+      "name": "Penne Pasta Crunch",
+      "description": "Creamy penne pasta topped with crunchy herbs and a special creamy sauce.",
+      "short_description": "Creamy crunchy pasta.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 650 }]
+    }
+  ],
+
+  "fries": [
+    {
+      "name": "Fries",
+      "description": "Golden crispy salted fries, perfectly fried to maintain crunch and flavor.",
+      "short_description": "Crispy salted fries.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 150 }]
+    },
+    {
+      "name": "Mayo Fries",
+      "description": "Fries topped with creamy mayo sauce and herbs for extra taste.",
+      "short_description": "Fries with mayo.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 280 }]
+    },
+    {
+      "name": "Loaded Fries",
+      "description": "Golden fries loaded with cheese, sauces, and fresh toppings.",
+      "short_description": "Cheese and sauce loaded fries.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 500 }]
+    }
+  ],
+
+  "drinks": [
+    {
+      "name": "Soft Drink",
+      "description": "Refreshing carbonated soft drink available in multiple sizes to quench your thirst anytime.",
+      "short_description": "Carbonated soft drink.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Small", "price": 80 },
+        { "size": "Medium", "price": 120 },
+        { "size": "Large", "price": 220 },
+        { "size": "1 Litre", "price": 160 }
+      ]
+    },
+    {
+      "name": "Water",
+      "description": "Fresh and pure bottled water available in small and large sizes.",
+      "short_description": "Pure bottled water.",
+      "image": "/images/mock-item.jpg",
+      "variants": [
+        { "size": "Small", "price": 60 },
+        { "size": "Large", "price": 120 }
+      ]
+    }
+  ],
+
+  "deals": [
+    {
+      "name": "Deal 1",
+      "description": "Small pizza with a small soft drink, perfect for a quick solo meal.",
+      "short_description": "Small pizza + soft drink.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 300 }]
+    },
+    {
+      "name": "Deal 2",
+      "description": "Medium pizza, 5 pieces hot wings, and medium soft drinks. Great for 2–3 people.",
+      "short_description": "Medium pizza + wings + drinks.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 1400 }]
+    },
+    {
+      "name": "Deal 3",
+      "description": "Large pizza, loaded fries, and two large soft drinks. Ideal for small gatherings or family.",
+      "short_description": "Large pizza + fries + drinks.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 2200 }]
+    },
+    {
+      "name": "Deal 4",
+      "description": "Two medium pizzas with a portion of mayo fries and two medium drinks, perfect for a sharing meal.",
+      "short_description": "2 medium pizzas + mayo fries + drinks.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 1500 }]
+    },
+    {
+      "name": "Deal 5",
+      "description": "Small pizza with a small portion of fries, ideal for a light meal.",
+      "short_description": "Small pizza + fries.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 400 }]
+    },
+    {
+      "name": "Deal 6",
+      "description": "Medium pizza and 6 oven-baked wings, served with a small drink.",
+      "short_description": "Medium pizza + oven wings + drink.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 780 }]
+    },
+    {
+      "name": "Deal 7",
+      "description": "Two large pizzas with a large portion of loaded fries, ideal for parties.",
+      "short_description": "2 large pizzas + loaded fries.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 1200 }]
+    },
+    {
+      "name": "Deal 8",
+      "description": "Small pizza with hot wings and a small soft drink.",
+      "short_description": "Small pizza + wings + drink.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 430 }]
+    },
+    {
+      "name": "Deal 9",
+      "description": "XL pizza with 12 flaming wings and two 1-litre drinks, perfect for large groups.",
+      "short_description": "XL pizza + flaming wings + drinks.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 1750 }]
+    },
+    {
+      "name": "Deal 10",
+      "description": "Medium pizza, penne pasta, and a medium soft drink, ideal for combo lovers.",
+      "short_description": "Medium pizza + pasta + drink.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 1000 }]
+    },
+    {
+      "name": "Deal 11",
+      "description": "Small pizza with a portion of fries and a small drink for a quick meal.",
+      "short_description": "Small pizza + fries + drink.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 580 }]
+    },
+    {
+      "name": "Deal 12",
+      "description": "XL pizza with loaded fries, 12 wings, and two 1-litre drinks for a family feast.",
+      "short_description": "XL pizza + fries + wings + drinks.",
+      "image": "/images/mock-item.jpg",
+      "variants": [{ "size": "Standard", "price": 2400 }]
+    }
+  ]
+}

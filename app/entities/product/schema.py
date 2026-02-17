@@ -1,12 +1,13 @@
 from decimal import Decimal
 from pydantic import BaseModel
+from app.entities.product_variant.schema import ProductVariantRead
 
 
 class ProductBase(BaseModel):
     name: str
     description: str | None = None
+    short_description: str | None = None
     category_id: int
-    price: Decimal
     photo: str | None = None
     is_featured: bool = False
     is_trending: bool = False
@@ -20,6 +21,7 @@ class ProductCreate(ProductBase):
 class ProductUpdate(BaseModel):
     name: str | None = None
     description: str | None = None
+    short_description: str | None = None
     category_id: int | None = None
     price: Decimal | None = None
     photo: str | None = None
@@ -30,6 +32,7 @@ class ProductUpdate(BaseModel):
 
 class ProductRead(ProductBase):
     id: int
+    variants: list[ProductVariantRead] = []  # size/options from menu.json
 
     class Config:
         from_attributes = True

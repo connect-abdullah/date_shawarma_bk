@@ -6,6 +6,7 @@ from app.entities.order.model import OrderStatusEnum
 
 class OrderItemBase(BaseModel):
     product_id: int
+    variant_id: int | None = None  # which size/variant from the menu.json
     quantity: int
     unit_price: Decimal
 

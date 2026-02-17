@@ -4,6 +4,7 @@ from app.db.base import Base
 from app.entities.user.model import User
 from app.entities.category.model import Category
 from app.entities.product.model import Product
+from app.entities.product_variant.model import ProductVariant
 from app.entities.order.model import Order
 from app.entities.order_item.model import OrderItem
 from app.entities.review.model import Review

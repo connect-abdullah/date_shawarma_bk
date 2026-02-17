@@ -8,12 +8,17 @@ class Product(Base, BaseModel):
 
     name = Column(String, nullable=False)
     description = Column(String, nullable=True)
+    short_description = Column(String, nullable=True)
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=False)
-    price = Column(Numeric(10, 2), nullable=False)
     photo = Column(String, nullable=True)
     is_featured = Column(Boolean, default=False, nullable=True)
     is_trending = Column(Boolean, default=False, nullable=True)
     is_available = Column(Boolean, default=True, nullable=False)
 
+    variants = relationship(
+        "ProductVariant",
+        backref="product",
+        cascade="all, delete-orphan",
+    )
     order_items = relationship("OrderItem", backref="product")
     reviews = relationship("Review", backref="product")
