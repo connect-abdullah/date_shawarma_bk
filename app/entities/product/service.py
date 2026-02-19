@@ -21,7 +21,6 @@ class ProductService:
     def get_all(
         self,
         featured_only: bool = False,
-        category: str | None = None,
         limit: int = 20,
     ) -> list[ProductListHomePage]:
         q = self.db.query(Product).filter(
@@ -31,14 +30,6 @@ class ProductService:
 
         if featured_only:
             q = q.filter(Product.is_featured == True)  # noqa: E712
-
-        if category:
-            # Filter by category name (case-insensitive), e.g. \"pizzas\", \"burgers\"
-            from app.entities.category.model import Category
-
-            q = q.join(Product.category).filter(
-                Category.category_name.ilike(category)
-            )
 
         # Hard limit page size
         q = q.order_by(Product.id).limit(limit)

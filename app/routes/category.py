@@ -5,6 +5,7 @@ from app.entities.category.service import CategoryService
 from app.entities.category.schema import CategoryCreate, CategoryRead, CategoryUpdate
 from app.core.response import APIResponse, ok, fail
 from app.core.auth import get_current_admin_id
+from app.cache import get_cache, set_cache, generate_cache_key, invalidate_cache
 
 router = APIRouter(prefix="/categories", tags=["Categories"])
 
@@ -17,6 +18,8 @@ def create_category(
 ):
     try:
         category = CategoryService(db).create(payload)
+        # Invalidate cache
+        invalidate_cache(prefix="categories")
         return ok(data=category, message="Category created")
     except Exception as e:
         return fail(message=str(e))
@@ -25,7 +28,18 @@ def create_category(
 @router.get("", response_model=APIResponse[list[CategoryRead]])
 def list_categories(db: Session = Depends(get_db)):
     try:
+        # Generate cache key
+        cache_key = generate_cache_key("categories")
+        # Check cache
+        categories = get_cache(cache_key)
+        if categories is not None:
+            return ok(data=categories, message="Categories retrieved from cache")
+        
+        # Get categories from database
         categories = CategoryService(db).get_all()
+
+        # Cache the result
+        set_cache(cache_key, categories, ttl=86400) # 1 day
         return ok(data=categories, message="Categories retrieved")
     except Exception as e:
         return fail(message=str(e))
@@ -55,6 +69,8 @@ def update_category(
         category = CategoryService(db).update(category_id, payload)
         if not category:
             raise HTTPException(status_code=404, detail="Category not found")
+        # Invalidate cache
+        invalidate_cache(prefix="categories")
         return ok(data=category, message="Category updated")
     except HTTPException:
         raise
@@ -70,6 +86,8 @@ def delete_category(
 ):
     try:
         deleted = CategoryService(db).delete(category_id)
+        # Invalidate cache
+        invalidate_cache(prefix="categories")
         return ok(data=deleted, message="Category deleted")
     except Exception as e:
         return fail(message=str(e))

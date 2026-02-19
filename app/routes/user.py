@@ -5,7 +5,6 @@ from app.entities.user.service import UserService
 from app.entities.user.schema import (
     UserCreate,
     UserRead,
-    UserCreateResponse,
     UserUpdate,
     UserLogin,
     UserTokenResponse,
@@ -18,7 +17,7 @@ from app.core.auth import get_current_admin_id, get_current_user_id
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
-@router.post("", response_model=APIResponse[UserCreateResponse])
+@router.post("", response_model=APIResponse[UserTokenResponse])
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     try:
         result = UserService(db).create_user(user)
@@ -53,12 +52,11 @@ def get_user(user_id: int, db: Session = Depends(get_db), _: int = Depends(get_c
         return fail(message=str(e))
 
 
-@router.put("/{user_id}", response_model=APIResponse[UserRead])
+@router.put("/update-me", response_model=APIResponse[UserRead])
 def update_user(
-    user_id: int,
     payload: UserUpdate,
     db: Session = Depends(get_db),
-    admin_id: int = Depends(get_current_admin_id),
+    admin_id: int = Depends(get_current_user_id),
 ):
     try:
         updated = UserService(db).update_user(user_id, payload)

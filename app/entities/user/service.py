@@ -3,7 +3,6 @@ from app.entities.user.model import User, UserRoleEnum
 from app.entities.user.schema import (
     UserCreate,
     UserRead,
-    UserCreateResponse,
     UserUpdate,
     UserLogin,
     UserTokenResponse,
@@ -26,7 +25,7 @@ class UserService:
     def check_email_exists(self, email: str) -> bool:
         return self.db.query(User).filter(User.email == email).first() is not None
 
-    def create_user(self, payload: UserCreate) -> UserCreateResponse:
+    def create_user(self, payload: UserCreate) -> UserTokenResponse:
         if self.check_email_exists(payload.email):
             raise ValueError("User with this email already exists")
         data = payload.model_dump()
@@ -37,7 +36,7 @@ class UserService:
         self.db.refresh(user)
         role_val = user.user_role.value
         token = create_token({"sub": str(user.id), "role": role_val})
-        return UserCreateResponse(
+        return UserTokenResponse(
             user=UserRead.model_validate(user),
             access_token=token,
             token_type="Bearer",
@@ -52,7 +51,7 @@ class UserService:
         if not user:
             return None
         data = payload.model_dump(exclude_unset=True)
-        if data.get("password"):
+        if data.get("password") and data["password"] != "":
             data["password"] = get_password_hash(data["password"])
         for key, value in data.items():
             setattr(user, key, value)
@@ -77,10 +76,7 @@ class UserService:
         role_val = user.user_role.value
         token = create_token({"sub": str(user.id), "role": role_val})
         return UserTokenResponse(
-            id=user.id,
-            name=user.name,
-            email=user.email,
-            user_role=user.user_role,
+            user=UserRead.model_validate(user),
             access_token=token,
             token_type="Bearer",
         )

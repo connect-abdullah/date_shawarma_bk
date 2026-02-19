@@ -8,7 +8,7 @@ class UserBase(BaseModel):
     email: str
     phone: str | None = None
     address: str | None = None
-    user_role: UserRoleEnum
+    user_role: UserRoleEnum = UserRoleEnum.CUSTOMER
 
 
 class UserCreate(UserBase):
@@ -34,20 +34,10 @@ class UserRead(UserBase):
     class Config:
         from_attributes = True
 
-
-class UserCreateResponse(BaseModel):
+class UserTokenResponse(BaseModel):
     user: UserRead
     access_token: str
     token_type: str = "Bearer"
-
-
-class UserTokenResponse(BaseModel):
-    id: int
-    name: str
-    email: EmailStr
-    user_role: UserRoleEnum
-    access_token: str
-    token_type: str
 
 
 class ForgotPassword(BaseModel):

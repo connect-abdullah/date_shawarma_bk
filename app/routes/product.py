@@ -5,6 +5,7 @@ from app.entities.product.service import ProductService
 from app.entities.product.schema import ProductCreate, ProductRead, ProductUpdate, ProductListHomePage
 from app.core.response import APIResponse, ok, fail
 from app.core.auth import get_current_admin_id
+from app.cache import get_cache, set_cache, generate_cache_key, invalidate_cache
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
@@ -17,6 +18,8 @@ def create_product(
 ):
     try:
         product = ProductService(db).create(payload)
+        # Invalidate cache
+        invalidate_cache(prefix="products")
         return ok(data=product, message="Product created")
     except Exception as e:
         return fail(message=str(e))
@@ -26,10 +29,6 @@ def create_product(
 def list_products(
     db: Session = Depends(get_db),
     featured: bool = Query(False),
-    category: str | None = Query(
-        default=None,
-        description="Optional category key (e.g. 'pizzas', 'burgers', 'wings')",
-    ),
     limit: int = Query(
         default=90,
         ge=1,
@@ -38,11 +37,21 @@ def list_products(
     ),
 ):
     try:
+        # Generate cache key
+        cache_key = generate_cache_key("products", featured=featured, limit=limit)
+        # Check cache
+        products = get_cache(cache_key)
+        if products is not None:
+            return ok(data=products, message="Products retrieved from cache")
+        
+        # Get products from database
         products = ProductService(db).get_all(
             featured_only=featured,
-            category=category,
             limit=limit,
         )
+
+        # Cache the result
+        set_cache(cache_key, products, ttl=3600) # 1 hour
         return ok(data=products, message="Products retrieved")
     except Exception as e:
         return fail(message=str(e))
@@ -72,6 +81,8 @@ def update_product(
         product = ProductService(db).update(product_id, payload)
         if not product:
             raise HTTPException(status_code=404, detail="Product not found")
+        # Invalidate cache
+        invalidate_cache(prefix="products")
         return ok(data=product, message="Product updated")
     except HTTPException:
         raise
@@ -87,6 +98,8 @@ def delete_product(
 ):
     try:
         deleted = ProductService(db).delete(product_id)
+        # Invalidate cache
+        invalidate_cache(prefix="products")
         return ok(data=deleted, message="Product deleted")
     except Exception as e:
         return fail(message=str(e))

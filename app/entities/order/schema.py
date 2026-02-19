@@ -1,5 +1,4 @@
 from datetime import datetime
-from decimal import Decimal
 from pydantic import BaseModel
 from app.entities.order.model import OrderStatusEnum
 
@@ -8,7 +7,7 @@ class OrderItemBase(BaseModel):
     product_id: int
     variant_id: int | None = None  # which size/variant from the menu.json
     quantity: int
-    unit_price: Decimal
+    unit_price: float
 
 
 class OrderItemRead(OrderItemBase):
@@ -23,14 +22,14 @@ class OrderBase(BaseModel):
     customer_id: int
     order_status: OrderStatusEnum
     order_date: datetime
-    total_price: Decimal
+    total_price: float
 
 
 class OrderCreate(BaseModel):
     customer_id: int
     order_status: OrderStatusEnum = OrderStatusEnum.PENDING
     order_date: datetime | None = None
-    total_price: Decimal
+    total_price: float
     items: list[OrderItemBase]
 
 
