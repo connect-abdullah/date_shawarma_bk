@@ -4,6 +4,9 @@ from sqlalchemy import Column, Integer, String, Numeric, DateTime, ForeignKey, E
 from sqlalchemy.orm import relationship
 from app.db.base import Base, BaseModel
 
+class PaymentMethodEnum(str, Enum):
+    COD = "COD"
+    BANK_TRANSFER = "BANK_TRANSFER"
 
 class OrderStatusEnum(str, Enum):
     PENDING = "PENDING"
@@ -22,5 +25,6 @@ class Order(Base, BaseModel):
     order_status = Column(SQLAEnum(OrderStatusEnum), nullable=False)
     order_date = Column(DateTime(timezone=True), nullable=False)
     total_price = Column(Numeric(10, 2), nullable=False)
+    payment_method = Column(SQLAEnum(PaymentMethodEnum), nullable=False)    
 
     order_items = relationship("OrderItem", backref="order", cascade="all, delete-orphan")

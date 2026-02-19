@@ -1,7 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel
-from app.entities.order.model import OrderStatusEnum
-
+from app.entities.order.model import OrderStatusEnum, PaymentMethodEnum
 
 class OrderItemBase(BaseModel):
     product_id: int
@@ -26,10 +25,8 @@ class OrderBase(BaseModel):
 
 
 class OrderCreate(BaseModel):
-    customer_id: int
-    order_status: OrderStatusEnum = OrderStatusEnum.PENDING
-    order_date: datetime | None = None
     total_price: float
+    payment_method: PaymentMethodEnum
     items: list[OrderItemBase]
 
 

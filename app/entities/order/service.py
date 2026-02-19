@@ -9,13 +9,13 @@ class OrderService:
     def __init__(self, db: Session) -> None:
         self.db = db
 
-    def create(self, payload: OrderCreate) -> OrderRead:
-        order_date = payload.order_date or datetime.now(timezone.utc)
+    def create(self, payload: OrderCreate, user_id: int) -> OrderRead:
         order = Order(
-            customer_id=payload.customer_id,
-            order_status=payload.order_status,
-            order_date=order_date,
+            customer_id=user_id,
+            order_status=OrderStatusEnum.PENDING,
+            order_date=datetime.now(timezone.utc),
             total_price=payload.total_price,
+            payment_method=payload.payment_method,
         )
         self.db.add(order)
         self.db.flush()
@@ -25,6 +25,7 @@ class OrderService:
                 product_id=item.product_id,
                 quantity=item.quantity,
                 unit_price=item.unit_price,
+                variant_id=item.variant_id,
             )
             self.db.add(oi)
         self.db.commit()

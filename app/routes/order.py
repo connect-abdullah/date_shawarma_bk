@@ -13,12 +13,10 @@ router = APIRouter(prefix="/orders", tags=["Orders"])
 def create_order(
     payload: OrderCreate,
     db: Session = Depends(get_db),
-    customer_id: int = Depends(get_current_customer_id),
+    user_id: int = Depends(get_current_user_id),
 ):
     try:
-        data = payload.model_dump()
-        data["customer_id"] = customer_id
-        order = OrderService(db).create(OrderCreate(**data))
+        order = OrderService(db).create(payload, user_id)
         return ok(data=order, message="Order created")
     except Exception as e:
         return fail(message=str(e))
