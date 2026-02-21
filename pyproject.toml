@@ -18,6 +18,7 @@ pydantic-settings = "*"
 PyJWT = "*"
 passlib = {extras = ["bcrypt"], version = "*"}
 email-validator = "*"
+supabase = "^2.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"

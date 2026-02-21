@@ -39,6 +39,7 @@ services:
         condition: service_healthy
     volumes:
       - .:/app
+      # ./images on host is available as /app/images for menu import script
     networks:
       - date-shawarma-network
     restart: unless-stopped
