@@ -14,6 +14,7 @@ from app.entities.user.schema import (
 from app.entities.user.model import UserRoleEnum
 from app.core.response import APIResponse, ok, fail
 from app.core.auth import get_current_admin_id, get_current_user_id
+from app.cache import generate_cache_key, get_cache, set_cache
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -42,10 +43,20 @@ def get_me(db: Session = Depends(get_db), user_id: int = Depends(get_current_use
 @router.get("/admin-dashboard", response_model=APIResponse[AdminDashboardResponse])
 def admin_dashboard(db: Session = Depends(get_db), admin_id: int = Depends(get_current_admin_id)):
     try:
-        if admin_id != admin_id:
-            raise HTTPException(status_code=403, detail="Admin access required")
+         # Generate cache key
+        cache_key = generate_cache_key("admin-dashboard")
+        # Check cache
+        dashboard = get_cache(cache_key)
+        if dashboard is not None:
+            return ok(data=dashboard, message="Admin dashboard retrieved from cache")
+        if not admin_id:
+            raise HTTPException(status_code=401, detail="Unauthorized")
         dashboard = UserService(db).admin_dashboard()
+        # Cache the result
+        set_cache(cache_key, dashboard, ttl=900) # 15 minutes
         return ok(data=dashboard, message="Admin dashboard retrieved")
+    except HTTPException:
+        raise
     except Exception as e:
         return fail(message=str(e))
 
