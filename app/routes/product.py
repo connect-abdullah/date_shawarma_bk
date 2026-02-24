@@ -36,7 +36,7 @@ def list_products(
         description="Max number of products to return",
     ),
 ):
-    try:
+    try:    
         # Generate cache key
         cache_key = generate_cache_key("products", featured=featured, limit=limit)
         # Check cache

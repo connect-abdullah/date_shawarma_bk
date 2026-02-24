@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 from app.entities.order.model import Order, OrderStatusEnum
 from app.entities.order_item.model import OrderItem
-from app.entities.order.schema import OrderCreate, OrderRead, OrderUpdate, OrderReadWithItems, OrderItemRead
+from app.entities.order.schema import OrderCreate, OrderRead, OrderUpdate, OrderReadWithItems, ListItems
 
 
 class OrderService:
@@ -37,7 +37,20 @@ class OrderService:
         if not order:
             return None
         data = OrderRead.model_validate(order).model_dump()
-        data["order_items"] = [OrderItemRead.model_validate(oi) for oi in order.order_items]
+        list_items = []
+        for oi in order.order_items:
+            list_items.append(ListItems(
+                id=oi.id,
+                product_id=oi.product_id,
+                product_name=oi.product.name,
+                variant_id=oi.variant_id,
+                variant_name=oi.variant.variant_name,
+                quantity=oi.quantity,
+                unit_price=oi.unit_price,
+                order_id=oi.order_id,
+                total_price=order.total_price,
+            ))
+        data["order_items"] = list_items
         return OrderReadWithItems(**data)
 
     def get_by_customer(self, customer_id: int) -> list[OrderRead]:

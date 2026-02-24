@@ -2,6 +2,7 @@ from decimal import Decimal
 from pydantic import BaseModel
 from app.entities.product_variant.schema import ProductVariantRead
 from app.entities.review.schema import ReviewRead
+from app.entities.product_variant.schema import ProductVariantCreate
 
 
 class ProductBase(BaseModel):
@@ -15,6 +16,7 @@ class ProductBase(BaseModel):
 
 
 class ProductCreate(ProductBase):
+    variants: list[ProductVariantCreate] = []
     pass
 
 
@@ -48,6 +50,7 @@ class ProductListHomePage(BaseModel):
     s_variant_price: float
     variant_product_id: int
     variant_id: int
+    is_available: bool
 
     class Config:
         from_attributes = True

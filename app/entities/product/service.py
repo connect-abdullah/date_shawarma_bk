@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from app.entities.product.model import Product
 from app.entities.product.schema import ProductCreate, ProductRead, ProductUpdate, ProductListHomePage
+from app.entities.product_variant.model import ProductVariant
 
 
 class ProductService:
@@ -8,10 +9,18 @@ class ProductService:
         self.db = db
 
     def create(self, payload: ProductCreate) -> ProductRead:
-        product = Product(**payload.model_dump())
+        product = Product(**payload.model_dump(exclude={"variants"}))
         self.db.add(product)
+        self.db.flush()  # get product.id from DB before creating variants
+        for v in payload.variants:
+            variant = ProductVariant(
+                product_id=product.id,
+                variant_name=v.variant_name,
+                price=v.price,
+            )
+            self.db.add(variant)
         self.db.commit()
-        self.db.refresh(product)
+        self.db.refresh(product) 
         return ProductRead.model_validate(product)
 
     def get_by_id(self, product_id: int) -> ProductRead | None:
@@ -23,11 +32,8 @@ class ProductService:
         featured_only: bool = False,
         limit: int = 20,
     ) -> list[ProductListHomePage]:
-        q = self.db.query(Product).filter(
-            Product.is_active == True,  # noqa: E712
-            Product.is_available == True,  # noqa: E712
-        )
-
+        q = self.db.query(Product)
+        
         if featured_only:
             q = q.filter(Product.is_featured == True)  # noqa: E712
 
@@ -57,6 +63,7 @@ class ProductService:
                     s_variant_price=v0.price,
                     variant_product_id=v0.product_id,
                     variant_id=v0.id,
+                    is_available=p.is_available,
                 )
             )
 

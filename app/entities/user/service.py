@@ -7,12 +7,17 @@ from app.entities.user.schema import (
     UserLogin,
     UserTokenResponse,
     ForgotPassword,
+    AdminDashboardResponse,
+    RecentOrder,
 )
 from app.core.security import get_password_hash, verify_password, create_token
 from app.core.email import EmailService
 from app.core.logging import get_logger
 from fastapi import HTTPException
 from datetime import datetime, timezone
+from app.entities.product.model import Product
+from app.entities.order.model import Order
+from app.entities.review.model import Review
 
 logger = get_logger(__name__)
 
@@ -95,3 +100,30 @@ class UserService:
             f"Your new password is: {new_password}",
         )
         return True
+
+    def admin_dashboard(self) -> AdminDashboardResponse:
+        """Admin dashboard data"""
+        try:
+            total_users = self.db.query(User).count()
+            total_products = self.db.query(Product).count()
+            total_orders = self.db.query(Order).count()
+            total_reviews = self.db.query(Review).count()
+            recent_orders = self.db.query(Order).order_by(Order.order_date.desc()).limit(5).all()
+            recent_orders_data = []
+            for order in recent_orders:
+                recent_orders_data.append(RecentOrder(item_names=[oi.product.name for oi in order.order_items],
+                    id=order.id,
+                    total_price=order.total_price,
+                    payment_method=order.payment_method,
+                    order_status=order.order_status,
+                ))
+            return AdminDashboardResponse(
+                total_users=total_users,
+                total_products=total_products,
+                total_orders=total_orders,
+                total_reviews=total_reviews,
+                recent_orders=recent_orders_data,
+            )
+        except Exception as e:
+            logger.error(f"Error getting admin dashboard: {str(e)}")
+            raise HTTPException(status_code=500, detail="Internal server error")

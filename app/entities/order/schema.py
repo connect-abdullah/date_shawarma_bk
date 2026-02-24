@@ -41,8 +41,20 @@ class OrderRead(OrderBase):
         from_attributes = True
 
 
+class ListItems(BaseModel):
+    id: int
+    product_id: int
+    product_name: str
+    variant_id: int | None = None
+    variant_name: str | None = None
+    quantity: int
+    unit_price: float
+    order_id: int
+    total_price: float
+    
+
 class OrderReadWithItems(OrderRead):
-    order_items: list[OrderItemRead] = []  # noqa: RUF012
+    order_items: list[ListItems] = []  # noqa: RUF012
 
     class Config:
         from_attributes = True

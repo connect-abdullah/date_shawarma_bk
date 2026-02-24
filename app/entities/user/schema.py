@@ -1,6 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel, EmailStr
 from app.entities.user.model import UserRoleEnum
+from app.entities.order.model import OrderStatusEnum, PaymentMethodEnum
 
 
 class UserBase(BaseModel):
@@ -42,3 +43,17 @@ class UserTokenResponse(BaseModel):
 
 class ForgotPassword(BaseModel):
     email: str
+
+class RecentOrder(BaseModel):
+    id: int
+    item_names: list[str]
+    total_price: float
+    payment_method: PaymentMethodEnum
+    order_status: OrderStatusEnum
+
+class AdminDashboardResponse(BaseModel):
+    total_users: int
+    total_products: int
+    total_orders: int
+    total_reviews: int
+    recent_orders: list[RecentOrder]

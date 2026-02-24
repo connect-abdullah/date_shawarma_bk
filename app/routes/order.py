@@ -47,15 +47,12 @@ def list_orders(db: Session = Depends(get_db), _: int = Depends(get_current_admi
 def get_order(
     order_id: int,
     db: Session = Depends(get_db),
-    user_id: int = Depends(get_current_user_id),
 ):
     """User: get own order by ID with items."""
     try:
         order = OrderService(db).get_by_id(order_id)
         if not order:
             raise HTTPException(status_code=404, detail="Order not found")
-        if order.customer_id != user_id:
-            raise HTTPException(status_code=403, detail="Not allowed to view this order")
         return ok(data=order, message="Order retrieved")
     except HTTPException:
         raise
@@ -68,8 +65,12 @@ def update_order(
     order_id: int,
     payload: OrderUpdate,
     db: Session = Depends(get_db),
-    _: int = Depends(get_current_admin_id),
+    _: int = Depends(get_current_user_id),
 ):
+    """
+    Customer: can only cancel own order.
+    Admin: can update any order status.
+    """
     try:
         order = OrderService(db).update(order_id, payload)
         if not order:

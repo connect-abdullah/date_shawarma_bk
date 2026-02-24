@@ -9,6 +9,7 @@ from app.entities.user.schema import (
     UserLogin,
     UserTokenResponse,
     ForgotPassword,
+    AdminDashboardResponse,
 )
 from app.entities.user.model import UserRoleEnum
 from app.core.response import APIResponse, ok, fail
@@ -37,6 +38,16 @@ def get_me(db: Session = Depends(get_db), user_id: int = Depends(get_current_use
         raise
     except Exception as e:
         return fail(message=str(e))
+    
+@router.get("/admin-dashboard", response_model=APIResponse[AdminDashboardResponse])
+def admin_dashboard(db: Session = Depends(get_db), admin_id: int = Depends(get_current_admin_id)):
+    try:
+        if admin_id != admin_id:
+            raise HTTPException(status_code=403, detail="Admin access required")
+        dashboard = UserService(db).admin_dashboard()
+        return ok(data=dashboard, message="Admin dashboard retrieved")
+    except Exception as e:
+        return fail(message=str(e))
 
 
 @router.get("/{user_id}", response_model=APIResponse[UserRead])
@@ -56,7 +67,7 @@ def get_user(user_id: int, db: Session = Depends(get_db), _: int = Depends(get_c
 def update_user(
     payload: UserUpdate,
     db: Session = Depends(get_db),
-    admin_id: int = Depends(get_current_user_id),
+    user_id: int = Depends(get_current_user_id),
 ):
     try:
         updated = UserService(db).update_user(user_id, payload)

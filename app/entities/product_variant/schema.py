@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 
 class ProductVariantBase(BaseModel):
-    product_id: int
+    product_id: int | None = None
     variant_name: str
     price: Decimal
 
