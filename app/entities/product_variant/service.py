@@ -45,6 +45,7 @@ class ProductVariantService:
         if not v:
             return False
         v.is_active = False
+        # add delete command for variant, not is_active
         self.db.commit()
         return True
 

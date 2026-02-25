@@ -7,10 +7,11 @@ class ReviewService:
     def __init__(self, db: Session) -> None:
         self.db = db
 
-    def create(self, payload: ReviewCreate) -> ReviewRead:
+    def create(self, payload: ReviewCreate, user_id: int) -> ReviewRead:
+        
         review = Review(
             product_id=payload.product_id,
-            user_id=payload.user_id,
+            user_id=user_id,
             rating=payload.rating,
             comment=payload.comment,
             is_approved=False,
@@ -42,3 +43,12 @@ class ReviewService:
 
     def approve(self, review_id: int) -> ReviewRead | None:
         return self.update(review_id, ReviewUpdate(is_approved=True))
+    
+    def delete(self, review_id:int) -> bool:
+        v = self.db.query(Review).filter(Review.id == review_id).first()
+        if not v:
+            return False
+        v.is_active = False # add delete command for variant, not is_active
+        self.db.commit()
+        return True
+

@@ -104,7 +104,7 @@ class UserService:
     def admin_dashboard(self) -> AdminDashboardResponse:
         """Admin dashboard data"""
         try:
-            total_users = self.db.query(User).count()
+            total_users = self.db.query(User).filter(User.user_role == UserRoleEnum.CUSTOMER).count()
             total_products = self.db.query(Product).count()
             total_orders = self.db.query(Order).count()
             total_reviews = self.db.query(Review).count()
