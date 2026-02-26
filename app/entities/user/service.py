@@ -87,19 +87,23 @@ class UserService:
         )
 
     def reset_password(self, payload: ForgotPassword) -> bool:
-        user = self.db.query(User).filter(User.email == payload.email).first()
-        if not user:
-            return False
-        from app.core.security import generate_random_password
-        new_password = generate_random_password(15)
-        user.password = get_password_hash(new_password)
-        self.db.commit()
-        self.email_service.send_email(
-            payload.email,
-            "Password Reset - Date Shawarma",
-            f"Your new password is: {new_password}",
-        )
-        return True
+        try:
+            user = self.db.query(User).filter(User.email == payload.email).first()
+            if not user:
+                return False
+            from app.core.security import generate_random_password
+            new_password = generate_random_password(15)
+            user.password = get_password_hash(new_password)
+            self.db.commit()
+            self.email_service.send_email(
+                payload.email,
+                "Password Reset - Date Shawarma",
+                f"Your new password is: {new_password}",
+            )
+            return True
+        except Exception as e:
+            logger.error(f"Error during forgot password for {payload.email}: {str(e)}")
+            raise HTTPException(status_code=500, detail="Unable to reset password at this time.")
 
     def admin_dashboard(self) -> AdminDashboardResponse:
         """Admin dashboard data"""

@@ -117,8 +117,11 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
 
 @router.post("/forgot-password", response_model=APIResponse[bool])
 def forgot_password(payload: ForgotPassword, db: Session = Depends(get_db)):
+    """Forgot password: send a new password to the user's email if the account exists."""
     try:
         result = UserService(db).reset_password(payload)
-        return ok(data=result, message="Password reset email sent")
+        return ok(data=result, message="Password successfully sent to email")
+    except HTTPException:
+        raise
     except Exception as e:
         return fail(message=str(e))
