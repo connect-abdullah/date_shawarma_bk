@@ -41,11 +41,10 @@ class ProductVariantService:
         return ProductVariantRead.model_validate(v)
 
     def delete(self, variant_id: int) -> bool:
-        v = self.db.query(ProductVariant).filter(ProductVariant.id == variant_id).first()
-        if not v:
+        variant = self.db.query(ProductVariant).filter(ProductVariant.id == variant_id).first()
+        if not variant:
             return False
-        v.is_active = False
-        # add delete command for variant, not is_active
+        self.db.delete(variant)
         self.db.commit()
         return True
 

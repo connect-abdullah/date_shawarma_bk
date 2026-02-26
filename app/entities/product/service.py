@@ -75,14 +75,29 @@ class ProductService:
             return None
         for key, value in payload.model_dump(exclude_unset=True).items():
             setattr(p, key, value)
+        if payload.variants:
+            for v in payload.variants:
+                variant = self.db.query(ProductVariant).filter(ProductVariant.id == v.id).first()
+                if not variant:
+                    # create new variant
+                    variant = ProductVariant(
+                        product_id=product_id,
+                        variant_name=v.variant_name,
+                        price=v.price,
+                    )
+                    self.db.add(variant)
+                else:
+                    # update existing variant
+                    for key, value in v.model_dump(exclude_unset=True).items():
+                        setattr(variant, key, value)
         self.db.commit()
         self.db.refresh(p)
         return ProductRead.model_validate(p)
 
     def delete(self, product_id: int) -> bool:
-        p = self.db.query(Product).filter(Product.id == product_id).first()
-        if not p:
+        product = self.db.query(Product).filter(Product.id == product_id).first()
+        if not product:
             return False
-        p.is_active = False
+        self.db.delete(product)
         self.db.commit()
         return True

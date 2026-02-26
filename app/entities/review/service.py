@@ -45,10 +45,10 @@ class ReviewService:
         return self.update(review_id, ReviewUpdate(is_approved=True))
     
     def delete(self, review_id:int) -> bool:
-        v = self.db.query(Review).filter(Review.id == review_id).first()
-        if not v:
+        review = self.db.query(Review).filter(Review.id == review_id).first()
+        if not review:
             return False
-        v.is_active = False # add delete command for variant, not is_active
+        self.db.delete(review)
         self.db.commit()
         return True
 

@@ -2,7 +2,7 @@ from decimal import Decimal
 from pydantic import BaseModel
 from app.entities.product_variant.schema import ProductVariantRead
 from app.entities.review.schema import ReviewRead
-from app.entities.product_variant.schema import ProductVariantCreate
+from app.entities.product_variant.schema import ProductVariantCreate, ProductVariantUpdate
 
 
 class ProductBase(BaseModel):
@@ -25,6 +25,7 @@ class ProductUpdate(BaseModel):
     description: str | None = None
     short_description: str | None = None
     category_id: int | None = None
+    variants: list[ProductVariantUpdate] | None = None
     photo: str | None = None
     is_featured: bool | None = None
     is_available: bool | None = None

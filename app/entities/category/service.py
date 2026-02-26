@@ -19,7 +19,7 @@ class CategoryService:
         return CategoryRead.model_validate(cat) if cat else None
 
     def get_all(self) -> list[CategoryRead]:
-        categories = self.db.query(Category).filter(Category.is_active == True).all()
+        categories = self.db.query(Category).all()
         return [CategoryRead.model_validate(c) for c in categories]
 
     def update(self, category_id: int, payload: CategoryUpdate) -> CategoryRead | None:
@@ -36,6 +36,6 @@ class CategoryService:
         cat = self.db.query(Category).filter(Category.id == category_id).first()
         if not cat:
             return False
-        cat.is_active = False
+        self.db.delete(cat)
         self.db.commit()
         return True

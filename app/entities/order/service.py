@@ -70,3 +70,11 @@ class OrderService:
         self.db.commit()
         self.db.refresh(order)
         return OrderRead.model_validate(order)
+    
+    def delete(self, order_id: int) -> bool:
+        order = self.db.query(Order).filter(Order.id == order_id).first()
+        if not order:
+            return False
+        self.db.delete(order)
+        self.db.commit()
+        return True
