@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, joinedload, selectinload
 from app.entities.product.model import Product
 from app.entities.product.schema import ProductCreate, ProductRead, ProductUpdate, ProductListHomePage
 from app.entities.product_variant.model import ProductVariant
@@ -67,12 +67,13 @@ class ProductService:
         limit: int = 20,
         offset: int = 0,
     ) -> list[ProductListHomePage]:
-        q = self.db.query(Product)
-        
+        q = self.db.query(Product).options(
+            joinedload(Product.category),
+            selectinload(Product.variants),
+            selectinload(Product.reviews),
+        )
         if featured_only:
             q = q.filter(Product.is_featured == True)  # noqa: E712
-
-        # Hard limit page size with offset for pagination
         q = q.order_by(Product.id).offset(offset).limit(limit)
 
         products = q.all()
@@ -80,13 +81,15 @@ class ProductService:
 
         for p in products:
             # Home page needs a "default" variant (first variant).
-            # If a product has no variants yet, skip it (or add one first).
+            # If a product has no variants yet, add one first.
             if not getattr(p, "variants", None):
                 continue
             v0 = p.variants[0]
             approved_ratings = [r.rating for r in getattr(p, "reviews", []) if getattr(r, "is_approved", False)]
             review_count = len(approved_ratings)
             avg_rating = (sum(approved_ratings) / review_count) if review_count else None
+            category = getattr(p, "category", None)
+            cateogry_name = getattr(category, "category_name", "") or "" if category else ""
 
             results.append(
                 ProductListHomePage(
@@ -95,13 +98,13 @@ class ProductService:
                     photo=p.photo or "",
                     short_description=p.short_description or "",
                     category_id=p.category_id,
-                    cateogry_name=getattr(getattr(p, "category", None), "category_name", "") or "",
+                    cateogry_name=cateogry_name,
                     is_featured=bool(p.is_featured),
                     variant_name=v0.variant_name,
-                    s_variant_price=v0.price,
+                    s_variant_price=float(v0.price),
                     variant_product_id=v0.product_id,
                     variant_id=v0.id,
-                    is_available=p.is_available,
+                    is_available=bool(p.is_available),
                     review_count=review_count,
                     avg_rating=avg_rating,
                 )
