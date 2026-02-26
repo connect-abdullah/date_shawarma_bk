@@ -26,10 +26,9 @@ def create_review(
 def get_reviews_by_product(
     product_id: int,
     db: Session = Depends(get_db),
-    approved_only: bool = True,
 ):
     try:
-        reviews = ReviewService(db).get_by_product(product_id, approved_only=approved_only)
+        reviews = ReviewService(db).get_by_product(product_id)
         return ok(data=reviews, message="Reviews retrieved")
     except Exception as e:
         return fail(message=str(e))

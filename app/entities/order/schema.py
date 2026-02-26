@@ -51,6 +51,10 @@ class ListItems(BaseModel):
     unit_price: float
     order_id: int
     total_price: float
+    payment_method: PaymentMethodEnum | str | None = None
+    customer_name: str | None = None
+    customer_address: str | None = None
+    created_at: datetime
     
 
 class OrderReadWithItems(OrderRead):

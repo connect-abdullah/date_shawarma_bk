@@ -1,7 +1,10 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from app.entities.product.model import Product
 from app.entities.product.schema import ProductCreate, ProductRead, ProductUpdate, ProductListHomePage
 from app.entities.product_variant.model import ProductVariant
+from app.entities.product_variant.schema import ProductVariantRead
+from app.entities.review.model import Review
+from app.entities.review.schema import ReviewRead
 
 
 class ProductService:
@@ -24,8 +27,39 @@ class ProductService:
         return ProductRead.model_validate(product)
 
     def get_by_id(self, product_id: int) -> ProductRead | None:
-        p = self.db.query(Product).filter(Product.id == product_id).first()
-        return ProductRead.model_validate(p) if p else None
+        product = (
+            self.db.query(Product)
+            .options(
+                joinedload(Product.variants),
+                joinedload(Product.reviews).joinedload(Review.user),
+            )
+            .filter(Product.id == product_id)
+            .first()
+        )
+        if not product:
+            return None
+        return ProductRead(
+            id=product.id,
+            name=product.name,
+            description=product.description,
+            short_description=product.short_description,
+            category_id=product.category_id,
+            photo=product.photo,
+            is_featured=bool(product.is_featured),
+            is_available=bool(product.is_available),
+            variants=[ProductVariantRead.model_validate(v) for v in product.variants],
+            reviews=[
+                ReviewRead(
+                    id=review.id,
+                    product_name=product.name,
+                    user_name=review.user.name,
+                    rating=review.rating,
+                    comment=review.comment,
+                    is_approved=review.is_approved,
+                )
+                for review in product.reviews
+            ],
+        )
 
     def get_all(
         self,
@@ -49,6 +83,9 @@ class ProductService:
             if not getattr(p, "variants", None):
                 continue
             v0 = p.variants[0]
+            approved_ratings = [r.rating for r in getattr(p, "reviews", []) if getattr(r, "is_approved", False)]
+            review_count = len(approved_ratings)
+            avg_rating = (sum(approved_ratings) / review_count) if review_count else None
 
             results.append(
                 ProductListHomePage(
@@ -64,6 +101,8 @@ class ProductService:
                     variant_product_id=v0.product_id,
                     variant_id=v0.id,
                     is_available=p.is_available,
+                    review_count=review_count,
+                    avg_rating=avg_rating,
                 )
             )
 

@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.routes import router
-
+from app.cache import invalidate_cache
 app = FastAPI(
     title=settings.app_name,
     version=settings.version,
@@ -33,3 +33,9 @@ def root():
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
+
+
+@app.get("/invalidate-cache")
+def invalidate_cache_route():
+    invalidate_cache()
+    return {"status": "cache invalidated", "message": "All cache entries have been invalidated"}

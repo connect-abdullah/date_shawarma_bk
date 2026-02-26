@@ -49,6 +49,10 @@ class OrderService:
                 unit_price=oi.unit_price,
                 order_id=oi.order_id,
                 total_price=order.total_price,
+                payment_method=order.payment_method,
+                customer_name=order.customer.name,
+                customer_address=order.customer.address,
+                created_at=order.created_at,
             ))
         data["order_items"] = list_items
         return OrderReadWithItems(**data)

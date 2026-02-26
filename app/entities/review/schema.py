@@ -18,8 +18,13 @@ class ReviewUpdate(BaseModel):
     is_approved: bool | None = None
 
 
-class ReviewRead(ReviewBase):
+class ReviewRead(BaseModel):
     id: int
+    product_name: str
+    user_name: str
+    rating: int
+    comment: str | None = None
+    is_approved: bool
 
     class Config:
         from_attributes = True

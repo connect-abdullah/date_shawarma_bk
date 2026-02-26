@@ -52,6 +52,8 @@ class ProductListHomePage(BaseModel):
     variant_product_id: int
     variant_id: int
     is_available: bool
+    review_count: int
+    avg_rating: float | None = None
 
     class Config:
         from_attributes = True
