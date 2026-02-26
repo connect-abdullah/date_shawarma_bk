@@ -65,14 +65,15 @@ class ProductService:
         self,
         featured_only: bool = False,
         limit: int = 20,
+        offset: int = 0,
     ) -> list[ProductListHomePage]:
         q = self.db.query(Product)
         
         if featured_only:
             q = q.filter(Product.is_featured == True)  # noqa: E712
 
-        # Hard limit page size
-        q = q.order_by(Product.id).limit(limit)
+        # Hard limit page size with offset for pagination
+        q = q.order_by(Product.id).offset(offset).limit(limit)
 
         products = q.all()
         results: list[ProductListHomePage] = []

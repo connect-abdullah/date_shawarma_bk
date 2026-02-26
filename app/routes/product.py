@@ -29,6 +29,7 @@ def create_product(
 def list_products(
     db: Session = Depends(get_db),
     featured: bool = Query(False),
+    page: int = Query(1, ge=1, description="Page number (1-based)"),
     limit: int = Query(
         default=90,
         ge=1,
@@ -37,8 +38,9 @@ def list_products(
     ),
 ):
     try:    
+        offset = (page - 1) * limit
         # Generate cache key
-        cache_key = generate_cache_key("products", featured=featured, limit=limit)
+        cache_key = generate_cache_key("products", featured=featured, page=page, limit=limit)
         # Check cache
         products = get_cache(cache_key)
         if products is not None:
@@ -48,6 +50,7 @@ def list_products(
         products = ProductService(db).get_all(
             featured_only=featured,
             limit=limit,
+            offset=offset,
         )
 
         # Cache the result
