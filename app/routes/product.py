@@ -104,5 +104,7 @@ def delete_product(
         # Invalidate cache
         invalidate_cache(prefix="products")
         return ok(data=deleted, message="Product deleted")
+    except HTTPException:
+        raise
     except Exception as e:
         return fail(message=str(e))

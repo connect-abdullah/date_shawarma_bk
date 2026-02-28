@@ -5,6 +5,8 @@ from app.entities.product_variant.model import ProductVariant
 from app.entities.product_variant.schema import ProductVariantRead
 from app.entities.review.model import Review
 from app.entities.review.schema import ReviewRead
+from app.entities.order_item.model import OrderItem
+from app.entities.order.model import Order
 
 
 class ProductService:
@@ -141,6 +143,18 @@ class ProductService:
         product = self.db.query(Product).filter(Product.id == product_id).first()
         if not product:
             return False
+        # Delete orders that contain this product (cascade deletes their order_items)
+        order_ids = [
+            row[0]
+            for row in self.db.query(OrderItem.order_id)
+            .filter(OrderItem.product_id == product_id)
+            .distinct()
+            .all()
+        ]
+        for oid in order_ids:
+            order = self.db.query(Order).filter(Order.id == oid).first()
+            if order:
+                self.db.delete(order)
         self.db.delete(product)
         self.db.commit()
         return True

@@ -20,5 +20,13 @@ class Product(Base, BaseModel):
         backref="product",
         cascade="all, delete-orphan",
     )
-    order_items = relationship("OrderItem", backref="product")
-    reviews = relationship("Review", backref="product")
+    order_items = relationship(
+        "OrderItem",
+        backref="product",
+        passive_deletes=True,
+    )
+    reviews = relationship(
+        "Review",
+        backref="product",
+        cascade="all, delete-orphan",
+    )
