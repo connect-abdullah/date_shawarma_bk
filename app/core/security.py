@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 import secrets
+import string
 import jwt
 from jwt.exceptions import ExpiredSignatureError
 from passlib.context import CryptContext
@@ -14,7 +15,9 @@ context = CryptContext(schemes=["sha512_crypt"])
 
 
 def generate_random_password(length: int) -> str:
-    return secrets.token_urlsafe(length)
+    """Generate a cryptographically secure password with letters and digits only (no hyphens/dashes)."""
+    alphabet = string.ascii_letters + string.digits  # a-z, A-Z, 0-9
+    return "".join(secrets.choice(alphabet) for _ in range(length))
 
 
 def generate_random_otp(length: int) -> str:

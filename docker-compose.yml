@@ -30,6 +30,10 @@ services:
     environment:
       RELOAD: "1"
       DATABASE_URL: ${DATABASE_URL}
+      GOOGLE_SMTP: ${GOOGLE_SMTP:-smtp.gmail.com}
+      GOOGLE_PORT: ${GOOGLE_PORT:-587}
+      GOOGLE_EMAIL: ${GOOGLE_EMAIL}
+      GOOGLE_PASSWORD: ${GOOGLE_PASSWORD}
       # To use local PostgreSQL instead, set in .env:
       # DATABASE_URL=postgresql://postgres:postgres@postgres:5432/date_shawarma
     ports:
