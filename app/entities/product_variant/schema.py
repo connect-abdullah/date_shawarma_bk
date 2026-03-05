@@ -13,6 +13,7 @@ class ProductVariantCreate(ProductVariantBase):
 
 
 class ProductVariantUpdate(BaseModel):
+    id: int | None = None  # present = update existing, absent = create new (matches frontend ProductVariantUpsert)
     variant_name: str | None = None
     price: Decimal | None = None
 

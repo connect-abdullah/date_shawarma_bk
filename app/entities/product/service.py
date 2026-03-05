@@ -91,7 +91,7 @@ class ProductService:
             review_count = len(approved_ratings)
             avg_rating = (sum(approved_ratings) / review_count) if review_count else None
             category = getattr(p, "category", None)
-            cateogry_name = getattr(category, "category_name", "") or "" if category else ""
+            category_name = getattr(category, "category_name", "") or "" if category else ""
 
             results.append(
                 ProductListHomePage(
@@ -100,7 +100,7 @@ class ProductService:
                     photo=p.photo or "",
                     short_description=p.short_description or "",
                     category_id=p.category_id,
-                    cateogry_name=cateogry_name,
+                    category_name=category_name,
                     is_featured=bool(p.is_featured),
                     variant_name=v0.variant_name,
                     s_variant_price=float(v0.price),
@@ -118,26 +118,32 @@ class ProductService:
         p = self.db.query(Product).filter(Product.id == product_id).first()
         if not p:
             return None
-        for key, value in payload.model_dump(exclude_unset=True).items():
+        # Update only plain product fields; exclude "variants" so we never assign payload list to p.variants (ORM relationship)
+        product_data = payload.model_dump(exclude_unset=True, exclude={"variants"})
+        for key, value in product_data.items():
             setattr(p, key, value)
-        if payload.variants:
+        # Handle variants from payload (plain dicts / Pydantic only; no ORM instances)
+        if payload.variants is not None:
             for v in payload.variants:
-                variant = self.db.query(ProductVariant).filter(ProductVariant.id == v.id).first()
-                if not variant:
-                    # create new variant
-                    variant = ProductVariant(
-                        product_id=product_id,
-                        variant_name=v.variant_name,
-                        price=v.price,
-                    )
-                    self.db.add(variant)
+                v_dict = v.model_dump(exclude_unset=True)
+                vid = v_dict.pop("id", None)
+                if vid:
+                    variant = self.db.query(ProductVariant).filter(ProductVariant.id == vid).first()
+                    if variant:
+                        for k, val in v_dict.items():
+                            setattr(variant, k, val)
                 else:
-                    # update existing variant
-                    for key, value in v.model_dump(exclude_unset=True).items():
-                        setattr(variant, key, value)
+                    self.db.add(
+                        ProductVariant(
+                            product_id=product_id,
+                            variant_name=v.variant_name or "",
+                            price=v.price or 0,
+                        )
+                    )
         self.db.commit()
         self.db.refresh(p)
-        return ProductRead.model_validate(p)
+        # Build ProductRead the same way as get_by_id (reviews need product_name/user_name from relations)
+        return self.get_by_id(product_id)
 
     def delete(self, product_id: int) -> bool:
         product = self.db.query(Product).filter(Product.id == product_id).first()

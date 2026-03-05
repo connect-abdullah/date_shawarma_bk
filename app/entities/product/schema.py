@@ -1,8 +1,10 @@
-from decimal import Decimal
-from pydantic import BaseModel
-from app.entities.product_variant.schema import ProductVariantRead
+from pydantic import BaseModel, ConfigDict
+from app.entities.product_variant.schema import (
+    ProductVariantCreate,
+    ProductVariantRead,
+    ProductVariantUpdate,
+)
 from app.entities.review.schema import ReviewRead
-from app.entities.product_variant.schema import ProductVariantCreate, ProductVariantUpdate
 
 
 class ProductBase(BaseModel):
@@ -17,27 +19,28 @@ class ProductBase(BaseModel):
 
 class ProductCreate(ProductBase):
     variants: list[ProductVariantCreate] = []
-    pass
 
 
 class ProductUpdate(BaseModel):
+    """All fields optional for PATCH-style updates."""
+
     name: str | None = None
     description: str | None = None
     short_description: str | None = None
     category_id: int | None = None
-    variants: list[ProductVariantUpdate] | None = None
     photo: str | None = None
     is_featured: bool | None = None
     is_available: bool | None = None
+    variants: list[ProductVariantUpdate] | None = None
 
 
 class ProductRead(ProductBase):
     id: int
-    variants: list[ProductVariantRead] = []  # size/options 
+    variants: list[ProductVariantRead] = []
     reviews: list[ReviewRead] = []
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
+
 
 class ProductListHomePage(BaseModel):
     id: int
@@ -45,7 +48,7 @@ class ProductListHomePage(BaseModel):
     photo: str
     short_description: str
     category_id: int
-    cateogry_name: str
+    category_name: str
     is_featured: bool
     variant_name: str
     s_variant_price: float
@@ -55,5 +58,4 @@ class ProductListHomePage(BaseModel):
     review_count: int
     avg_rating: float | None = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

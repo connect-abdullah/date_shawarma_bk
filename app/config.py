@@ -38,7 +38,7 @@ class Settings(BaseSettings):
 
     # CORS
     cors_origins: List[str] = Field(
-        default=["*"],
+        default=["http://localhost:3000", "http://localhost:3001", "https://date-shawarma.vercel.app"],
         description="Allowed CORS origins",
     )
 
