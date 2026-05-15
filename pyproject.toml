@@ -3,7 +3,6 @@ name = "date-shawarma-bk"
 version = "0.1.0"
 description = "Date Shawarma Backend API"
 authors = ["Date Shawarma"]
-readme = "README.md"
 packages = [{include = "app"}]
 
 [tool.poetry.dependencies]
