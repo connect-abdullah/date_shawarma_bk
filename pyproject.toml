@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "date-shawarma-bk"
-version = "0.1.1"
+version = "0.1.2"
 description = "Date Shawarma Backend API"
 authors = ["Date Shawarma"]
-package-mode = false
+packages = [{include = "app"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
-fastapi = "*"
+fastapi = {extras = ["standard"], version = "*"}
 uvicorn = {extras = ["standard"], version = "*"}
 sqlalchemy = "*"
 alembic = "*"
